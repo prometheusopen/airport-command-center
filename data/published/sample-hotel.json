@@ -3,14 +3,14 @@
  "client": {
   "id": "sample-hotel",
   "name": "Sample Hotel",
-  "tagline": "Airport shuttle every 20 minutes",
+  "tagline": "Free airport shuttle · every 20 min",
   "accent": "#f2b33d",
-  "theme": "dark",
+  "theme": "steel",
   "monogram": "SH",
   "scene": "lobby"
  },
  "version": 1,
- "publishedAt": "2026-11-18T05:38:31.917Z",
+ "publishedAt": "2026-11-18T05:53:34.236Z",
  "sample": true,
  "items": [
   {

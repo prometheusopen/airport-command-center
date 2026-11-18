@@ -5,12 +5,12 @@
   "name": "Sample Café",
   "tagline": "Gate-side kitchen · Concourse B",
   "accent": "#5ec4b6",
-  "theme": "dark",
+  "theme": "espresso",
   "monogram": "SC",
   "scene": "restaurant"
  },
  "version": 1,
- "publishedAt": "2026-11-18T05:38:31.913Z",
+ "publishedAt": "2026-11-18T05:53:34.232Z",
  "sample": true,
  "items": [
   {

@@ -14,6 +14,11 @@ import { forecastWave } from '../lib/wave.js';
 import { EtaEngine } from '../lib/eta.js';
 import { Traccar, toFix } from '../lib/traccar.js';
 import { CmsStore } from '../cms/store.js';
+import { FeedChain } from '../lib/flightfeed.js';
+import { TtlCache } from '../lib/cache.js';
+import { flightChanges, changeText, frontDeskChanges } from '../lib/changes.js';
+import { textAlertFrom } from '../lib/textalert.js';
+import { shuttleArriving, faaDelay } from '../lib/alerts.js';
 
 const env = loadEnv();
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -21,6 +26,19 @@ const PORT = Number(env.PORT || 8790); const AIRPORT = env.AIRPORT || 'ORD';
 const PUB = path.join(ROOT, 'data/published');
 const cms = new CmsStore(path.join(ROOT, 'data/cms.sqlite'));
 if (cms.seedIfEmpty()) for (const c of cms.clients()) cms.publish(c.id, PUB);
+
+// ---- Flights: one FlightFeed chain + one cache for every screen at every property
+const PROPS = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/properties.json'), 'utf8'));
+const feeds = new FeedChain((env.FLIGHT_FEEDS || 'sample').split(','), {}); // paid adapters are stubs; no keys
+const flightCache = new TtlCache(); const FLIGHT_TTL = Number(env.FLIGHT_TTL_S || 60) * 1000;
+const texts = textAlertFrom(env); let lastBoard = null; let faaSeen = '';
+async function board(airport) {
+  const [a, d] = await Promise.all(['arrivals', 'departures'].map((k) => flightCache.get(`${k}:${airport}`, FLIGHT_TTL, () => feeds.get(k, airport))));
+  if (!a.ok || !d.ok) throw new Error(a.error || d.error);
+  const out = { arrivals: { ...a.value, stale: a.stale, fetchedAt: a.at }, departures: { ...d.value, stale: d.stale, fetchedAt: d.at } };
+  if (lastBoard && lastBoard.at !== a.at) for (const c of frontDeskChanges(flightChanges(lastBoard.rows, a.value.rows))) texts.preview.send({ kind: 'flight', text: 'Sample flight change: ' + changeText(c) }); // preview log only
+  lastBoard = { at: a.at, rows: a.value.rows }; return out;
+}
 
 // ---- Shuttle: live positions from Traccar -> ETA engine -> SSE clients
 const route = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/route.json'), 'utf8'));
@@ -32,6 +50,7 @@ function onFix(f) {
   if (f.time <= lastFixTime) return; lastFixTime = f.time;
   if (engine.arrived && engine.last && f.time - engine.last.time > 60e3) engine.reset(); // new trip
   const r = engine.update(f);
+  for (const ev of r.events) if (ev.type === 'arriving') texts.send({ kind: 'shuttle', ...shuttleArriving({ van: 'Van 1', property: 'Sample Hotel', etaS: r.etaS }) });
   shuttle = { status: 'live', source: 'traccar', fix: f, eta: r, route: route.name };
   const msg = `data: ${JSON.stringify(shuttle)}\n\n`; for (const res of sse) res.write(msg);
 }
@@ -48,7 +67,7 @@ startTraccar();
 
 // ---- HTTP
 const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json', '.svg': 'image/svg+xml', '.png': 'image/png', '.mp3': 'audio/mpeg' };
-const send = (res, code, body, type = 'application/json') => { res.writeHead(code, { 'content-type': type, 'cache-control': 'no-store' }); res.end(typeof body === 'string' || Buffer.isBuffer(body) ? body : JSON.stringify(body)); };
+const send = (res, code, body, type = 'application/json') => { if (res.req?.method === 'HEAD') { res.writeHead(code, { 'content-type': type, 'cache-control': 'no-store' }); return res.end(); } res.writeHead(code, { 'content-type': type, 'cache-control': 'no-store' }); res.end(typeof body === 'string' || Buffer.isBuffer(body) ? body : JSON.stringify(body)); };
 const readBody = (req) => new Promise((ok, no) => { let s = ''; req.on('data', (c) => { s += c; if (s.length > 1e5) no(new Error('too large')); }); req.on('end', () => { try { ok(s ? JSON.parse(s) : {}); } catch (e) { no(e); } }); });
 const STATIC = { '/player/': path.join(ROOT, 'player'), '/player/lib/': path.join(ROOT, 'lib'), '/data/': path.join(ROOT, 'data') };
 function serveStatic(res, p) {
@@ -65,7 +84,13 @@ const server = http.createServer(async (req, res) => {
   try {
     if (p === '/' || p === '/index.html') return send(res, 200, fs.readFileSync(path.join(ROOT, 'player/index.html')), TYPES['.html']);
     if (p === '/admin') return send(res, 200, fs.readFileSync(path.join(ROOT, 'cms/admin.html')), TYPES['.html']);
-    if (p === '/api/airport/status') return send(res, 200, await airportStatus(AIRPORT));
+    if (p === '/api/airport/status') { const st = await airportStatus(AIRPORT); const pr = (st.faa?.programs || []).filter((x) => x.affects !== 'notice')[0]; const k = pr ? pr.kind + pr.avgMin : ''; if (k && k !== faaSeen) texts.send({ kind: 'faa', ...faaDelay({ airport: AIRPORT, ...pr }) }); faaSeen = k; return send(res, 200, st); }
+    if (p === '/board') return send(res, 200, fs.readFileSync(path.join(ROOT, 'player/board.html')), TYPES['.html']);
+    if (p === '/api/health') return send(res, 200, { ok: true });
+    if (p === '/api/board/config') { const pr = PROPS.properties[u.searchParams.get('property')]; const sc = pr?.screens[u.searchParams.get('screen')]; if (!sc) return send(res, 404, { error: 'unknown property or screen' }); const pl = JSON.parse(fs.readFileSync(path.join(PUB, pr.client + '.json'), 'utf8')); return send(res, 200, { ...sc, client: pr.client, skin: pl.client.theme }); }
+    if (p === '/api/board/flights') return send(res, 200, await board(AIRPORT));
+    if (p === '/api/board/feeds') return send(res, 200, { chain: feeds.describe(), cache: flightCache.stats, upstreamCache: (await import('../lib/feeds.js')).cache.stats });
+    if (p === '/api/alerts/preview') return send(res, 200, { delivery: 'not connected (preview only)', textChannel: texts.channel.id, twilio: { enabled: texts.twilio.enabled }, alerts: texts.preview.log });
     if (p === '/api/flights/arrivals') return send(res, 200, { sample: true, label: 'Sample data', rows: sampleArrivals() });
     if (p === '/api/flights/departures') return send(res, 200, { sample: true, label: 'Sample data', rows: sampleDepartures() });
     if (p === '/api/forecast/arrivals') { const st = await airportStatus(AIRPORT); return send(res, 200, forecastWave(sampleArrivals(), { faaArrivalDelayMin: st.faa?.arrivalDelayMin || 0 })); }

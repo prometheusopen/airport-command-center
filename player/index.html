@@ -6,5 +6,5 @@
 <body><main><h1>Lobby screen · local product (live Traccar)</h1><div id="acc"></div></main>
 <script type="module">
 import { mountPlayer } from '/player/player.js';
-mountPlayer(document.getElementById('acc'), { mode: 'server', statusUrl: '/api/airport/status', routeUrl: '/api/shuttle/route', mapUrl: '/data/map.json', streamUrl: '/api/shuttle/stream', playlistUrl: (id) => `/api/lobby/content?client=${id}` });
+mountPlayer(document.getElementById('acc'), { mode: 'server', statusUrl: '/api/airport/status', flightsUrl: '/api/board/flights?property=demo-hotel', routeUrl: '/api/shuttle/route', mapUrl: '/data/map.json', streamUrl: '/api/shuttle/stream', playlistUrl: (id) => `/api/lobby/content?client=${id}` });
 </script></body></html>

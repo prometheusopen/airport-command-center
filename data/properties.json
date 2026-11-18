@@ -1,0 +1,11 @@
+{
+  "_note": "Board URL: /board?property=<id>&screen=<id>&skin=<graphite|steel|espresso|caramel>. Fictional sample properties only.",
+  "airport": "ORD",
+  "properties": {
+    "demo-hotel": { "client": "sample-hotel", "screens": {
+      "lobby-1": { "scene": "lobby", "gps": true, "label": "Lobby, by the front desk (shuttle map)" },
+      "lobby-2": { "scene": "lobby", "gps": false, "label": "Lobby, by the elevators (flight board)" } } },
+    "demo-cafe": { "client": "sample-cafe", "screens": {
+      "gate-b-1": { "scene": "restaurant", "label": "Café counter (departures)" } } }
+  }
+}

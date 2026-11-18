@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex">
+<title>Flight board</title><link rel="stylesheet" href="/player/player.css">
+<style>html,body{margin:0;background:#000;overflow:hidden;height:100%}</style></head>
+<body><div id="board"></div>
+<script type="module">
+// Kiosk board for one screen at one property: /board?property=demo-hotel&screen=lobby-1&skin=espresso
+import { mountPlayer } from '/player/player.js';
+const q = new URLSearchParams(location.search);
+const property = q.get('property') || 'demo-hotel', screen = q.get('screen') || 'lobby-1', skin = q.get('skin');
+const start = async () => {
+  try {
+    const cfg = await (await fetch(`/api/board/config?property=${encodeURIComponent(property)}&screen=${encodeURIComponent(screen)}`, { cache: 'no-store' })).json();
+    if (cfg.error) throw new Error(cfg.error);
+    await mountPlayer(document.getElementById('board'), { mode: 'server', kiosk: true, scene: cfg.scene, gps: cfg.gps, skin: ['graphite', 'steel', 'espresso', 'caramel'].includes(skin) ? skin : cfg.skin,
+      statusUrl: '/api/airport/status', flightsUrl: `/api/board/flights?property=${encodeURIComponent(property)}`, healthUrl: '/api/health', streamUrl: '/api/shuttle/stream',
+      routeUrl: '/data/route.json', mapUrl: '/data/map.json', playlistUrl: (id) => `/api/lobby/content?client=${id}` });
+  } catch (e) { document.body.style.color = '#888'; document.getElementById('board').textContent = 'Board starting… retrying'; setTimeout(() => location.reload(), 15000); }
+};
+start();
+</script></body></html>

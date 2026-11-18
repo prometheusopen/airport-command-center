@@ -1,5 +1,5 @@
 Airport Command Center (phase 0)
-Copyright 2026 Prometheus Open. Licensed under the Apache License, Version 2.0.
+Copyright (c) 2026 Prometheus Open. Code: MIT License (see LICENSE).
 
 Third-party data and software used (not vendored unless stated):
 - data/route.json, data/map.json, data/raw/*.json, data/sim-track.json, data/traccar-session.json:

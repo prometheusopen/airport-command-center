@@ -1,4 +1,4 @@
-// Our own SVG illustrations (Apache-2.0, drawn in code for this project): weather icons,
+// Our own SVG illustrations (, drawn in code for this project): weather icons,
 // content images for the sample ads, a monogram logo, and the lobby/restaurant room scenes.
 // No third-party artwork, no real brands.
 
@@ -55,14 +55,26 @@ export function roomArt(scene) {
     <g fill="#4e8f6b"><circle cx="1500" cy="640" r="40"/><circle cx="1470" cy="610" r="32"/></g>
     <rect x="0" y="960" width="1600" height="40" fill="#3a2516"/>
   </svg>`;
+  // Upscale lobby: walnut slat wall, warm wall washers, stone floor, low credenza, plant, sconces.
+  const slats = Array.from({ length: 40 }, (_, k) => `<rect x="${k * 40}" y="0" width="30" height="800" fill="url(#ls)"/>`).join('');
   return `<svg class="room-art" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
-    <defs><linearGradient id="lw" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e9e1d4"/><stop offset="1" stop-color="#d8cdbb"/></linearGradient><linearGradient id="lf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7d6a55"/><stop offset="1" stop-color="#5d4e3e"/></linearGradient></defs>
-    <rect width="1600" height="1000" fill="url(#lw)"/>
-    <g stroke="#cfc3ae" stroke-width="2">${Array.from({ length: 17 }, (_, i) => `<line x1="${i * 100}" y1="0" x2="${i * 100}" y2="820"/>`).join('')}</g>
-    <rect x="0" y="820" width="1600" height="180" fill="url(#lf)"/>
-    <g class="room-window"><rect x="40" y="120" width="180" height="560" rx="6" fill="#9cc3dd"/><rect x="40" y="120" width="180" height="560" rx="6" fill="none" stroke="#b9ab94" stroke-width="10"/><line x1="130" y1="120" x2="130" y2="680" stroke="#b9ab94" stroke-width="6"/></g>
-    <g><rect x="380" y="740" width="840" height="100" rx="14" fill="#5a4a3a"/><rect x="360" y="720" width="880" height="30" rx="10" fill="#8a7458"/></g>
-    <g fill="#3f7d5a"><path d="M1400 820c-60-120-20-220 40-260-10 90 30 160-40 260z"/><path d="M1420 820c40-140 120-180 160-180-60 60-70 120-160 180z"/><path d="M1410 820c-10-160 40-260 100-300-40 120-30 200-100 300z"/></g><rect x="1380" y="800" width="80" height="60" rx="10" fill="#c9b79c"/>
-    <g fill="#8a7458"><rect x="1250" y="560" width="10" height="190"/><path d="M1225 560h60l-10-60h-40z" fill="#f3e4c4"/></g>
+    <defs>
+      <linearGradient id="ls" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#5a3a24"/><stop offset=".5" stop-color="#734a2e"/><stop offset="1" stop-color="#4a2f1d"/></linearGradient>
+      <radialGradient id="lwash" cx="50%" cy="0%" r="70%"><stop offset="0" stop-color="#ffd9a0" stop-opacity=".55"/><stop offset="1" stop-color="#ffd9a0" stop-opacity="0"/></radialGradient>
+      <linearGradient id="lfl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#cfc6b8"/><stop offset="1" stop-color="#a99f90"/></linearGradient>
+      <linearGradient id="lcr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a2522"/><stop offset="1" stop-color="#171412"/></linearGradient>
+    </defs>
+    <rect width="1600" height="1000" fill="#3b2617"/>${slats}
+    <rect width="1600" height="800" fill="#000" opacity=".18"/>
+    ${[260, 800, 1340].map((x) => `<ellipse class="lamp-glow" cx="${x}" cy="0" rx="330" ry="520" fill="url(#lwash)"/>`).join('')}
+    <rect x="0" y="790" width="1600" height="14" fill="#2b1b10"/>
+    <rect x="0" y="804" width="1600" height="196" fill="url(#lfl)"/>
+    <g stroke="#b9b0a2" stroke-width="2" opacity=".6">${Array.from({ length: 9 }, (_, k) => `<line x1="${k * 200}" y1="804" x2="${k * 200 - 120}" y2="1000"/>`).join('')}<line x1="0" y1="900" x2="1600" y2="900"/></g>
+    <g><rect x="420" y="700" width="760" height="96" rx="8" fill="url(#lcr)"/><rect x="420" y="700" width="760" height="10" rx="4" fill="#4a423c"/><rect x="460" y="796" width="16" height="12" fill="#111"/><rect x="1124" y="796" width="16" height="12" fill="#111"/>
+      <rect x="470" y="664" width="90" height="36" rx="4" fill="#d8cfc0"/><circle cx="1110" cy="676" r="24" fill="#b08d57"/><rect x="1104" y="640" width="12" height="40" fill="#8a6b3f"/></g>
+    ${[110, 1490].map((x) => `<g><rect x="${x - 9}" y="300" width="18" height="70" rx="6" fill="#c9a36a"/><ellipse class="lamp-glow" cx="${x}" cy="300" rx="70" ry="110" fill="#ffd27a" opacity=".28"/></g>`).join('')}
+    <g fill="#2f5a3e"><path d="M1420 800c-60-140-10-260 50-300-10 100 30 180-50 300z"/><path d="M1440 800c40-160 130-200 170-200-70 70-80 130-170 200z"/><path d="M1430 800c-10-180 50-290 110-330-50 130-40 220-110 330z"/></g>
+    <rect x="1395" y="780" width="90" height="70" rx="10" fill="#1d1a18"/>
+    <g fill="#2f5a3e" opacity=".9"><path d="M160 800c-50-120 0-220 40-250 0 90 20 160-40 250z"/><path d="M175 800c30-130 100-170 140-170-60 60-60 110-140 170z"/></g><rect x="135" y="780" width="80" height="64" rx="10" fill="#1d1a18"/>
   </svg>`;
 }

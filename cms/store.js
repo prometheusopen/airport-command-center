@@ -1,15 +1,16 @@
-// Minimal content manager store: SQLite via node:sqlite (built into Node 22.5+/24). Apache-2.0.
+// Minimal content manager store: SQLite via node:sqlite (built into Node 22.5+/24)
 // Clients own branding and content items; publish() writes a versioned playlist JSON that the
 // player reads. All seeded content is fictional (no real brands).
 import { DatabaseSync } from 'node:sqlite';
 import fs from 'node:fs';
 
 const SCHEMA = `
-CREATE TABLE IF NOT EXISTS clients (id TEXT PRIMARY KEY, name TEXT NOT NULL, tagline TEXT, scene TEXT NOT NULL, accent TEXT NOT NULL DEFAULT '#f2b33d', theme TEXT NOT NULL DEFAULT 'dark', monogram TEXT, version INTEGER NOT NULL DEFAULT 0, published_at TEXT);
+CREATE TABLE IF NOT EXISTS clients (id TEXT PRIMARY KEY, name TEXT NOT NULL, tagline TEXT, scene TEXT NOT NULL, accent TEXT NOT NULL DEFAULT '#f2b33d', theme TEXT NOT NULL DEFAULT 'steel', monogram TEXT, version INTEGER NOT NULL DEFAULT 0, published_at TEXT);
 CREATE TABLE IF NOT EXISTS items (id INTEGER PRIMARY KEY AUTOINCREMENT, client_id TEXT NOT NULL REFERENCES clients(id) ON DELETE CASCADE, kind TEXT NOT NULL CHECK (kind IN ('special','ad','menu','notice')), title TEXT NOT NULL, body TEXT, price TEXT, image TEXT, duration_s INTEGER NOT NULL DEFAULT 8, start_hhmm TEXT NOT NULL DEFAULT '00:00', end_hhmm TEXT NOT NULL DEFAULT '24:00', days TEXT NOT NULL DEFAULT 'mon,tue,wed,thu,fri,sat,sun', weight INTEGER NOT NULL DEFAULT 1, enabled INTEGER NOT NULL DEFAULT 1, sort INTEGER NOT NULL DEFAULT 0);
 `;
 const IMAGES = ['breakfast', 'coffee', 'bowl', 'cocktail', 'pastry', 'room'];
 export const KINDS = ['special', 'ad', 'menu', 'notice'];
+export const SKINS = ['graphite', 'steel', 'espresso', 'caramel'];
 const HHMM = /^([01]\d|2[0-4]):[0-5]\d$/;
 
 export class CmsStore {
@@ -17,8 +18,8 @@ export class CmsStore {
   seedIfEmpty() {
     if (this.db.prepare('SELECT COUNT(*) n FROM clients').get().n) return false;
     const c = this.db.prepare('INSERT INTO clients (id,name,tagline,scene,accent,theme,monogram) VALUES (?,?,?,?,?,?,?)');
-    c.run('sample-hotel', 'Sample Hotel', 'Airport shuttle every 20 minutes', 'lobby', '#f2b33d', 'dark', 'SH');
-    c.run('sample-cafe', 'Sample Café', 'Gate-side kitchen · Concourse B', 'restaurant', '#5ec4b6', 'dark', 'SC');
+    c.run('sample-hotel', 'Sample Hotel', 'Free airport shuttle · every 20 min', 'lobby', '#f2b33d', 'steel', 'SH');
+    c.run('sample-cafe', 'Sample Café', 'Gate-side kitchen · Concourse B', 'restaurant', '#5ec4b6', 'espresso', 'SC');
     const i = this.db.prepare('INSERT INTO items (client_id,kind,title,body,price,image,duration_s,start_hhmm,end_hhmm,sort) VALUES (?,?,?,?,?,?,?,?,?,?)');
     i.run('sample-hotel', 'special', 'Late check-in? Grab a hot plate', 'Kitchen open until midnight. Ask the front desk.', '$14', 'bowl', 8, '17:00', '24:00', 1);
     i.run('sample-hotel', 'ad', 'Morning coffee bar', 'Fresh espresso drinks in the lobby from 5 AM.', null, 'coffee', 8, '00:00', '24:00', 2);
@@ -37,7 +38,7 @@ export class CmsStore {
     const cur = this.client(id); if (!cur) throw new Error('no such client');
     const v = { ...cur, ...pick(b, ['name', 'tagline', 'accent', 'theme', 'monogram']) };
     if (!/^#[0-9a-f]{6}$/i.test(v.accent)) throw new Error('accent must be #rrggbb');
-    if (!['dark', 'light'].includes(v.theme)) throw new Error('theme must be dark or light');
+    if (!SKINS.includes(v.theme)) throw new Error('theme must be one of ' + SKINS.join(', '));
     if (!v.name || v.name.length > 40) throw new Error('name 1-40 chars');
     this.db.prepare('UPDATE clients SET name=?,tagline=?,accent=?,theme=?,monogram=? WHERE id=?').run(v.name, v.tagline || '', v.accent, v.theme, (v.monogram || '').slice(0, 3), id);
     return this.client(id);
