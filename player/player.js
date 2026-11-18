@@ -157,6 +157,8 @@ class Player {
     const r = this.root; r.classList.add('kiosk'); this.setView('screen');
     const fit = () => { const k = Math.min(innerWidth / 1920, innerHeight / 1080); this.wrap.style.width = `${1920 * k}px`; this.wrap.style.height = `${1080 * k}px`; this.screen.style.transform = `scale(${k})`; };
     addEventListener('resize', fit); fit();
+    // Embedded on a web page (embed=1): keep the cursor, and skip the signage-only burn-in shift and reload guard.
+    if (this.cfg.embed) { r.classList.add('embed'); return; }
     // Burn-in care: shift the whole picture by up to 2 px every 3 minutes (imperceptible at 10 ft).
     const shifts = [[0, 0], [2, 0], [2, 2], [0, 2], [-2, 2], [-2, 0], [-2, -2], [0, -2], [2, -2]]; let si = 0;
     setInterval(() => { si = (si + 1) % shifts.length; this.$('.acc-tv').style.transform = `translate(${shifts[si][0]}px, ${shifts[si][1]}px)`; }, 180e3);

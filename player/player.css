@@ -206,6 +206,7 @@
 .scr-net{position:absolute;right:40px;bottom:80px;z-index:9;margin:0;font-size:22px;font-weight:700;background:#ffd84d;color:#1a1400;padding:8px 16px;border-radius:999px}.scr-net[hidden]{display:none}
 .acc.kiosk{position:fixed;inset:0;background:#000;display:flex;align-items:center;justify-content:center;cursor:none}
 .acc.kiosk *{cursor:none!important}
+.acc.kiosk.embed,.acc.kiosk.embed *{cursor:auto!important}
 .acc.kiosk .acc-bar,.acc.kiosk .acc-honest,.acc.kiosk .acc-phone,.acc.kiosk .acc-room-art{display:none!important}
 .acc.kiosk .acc-stage{display:block}.acc.kiosk .acc-room{padding:0;border-radius:0;background:#000}
 .acc.kiosk .acc-tv{filter:none;transition:transform 2s ease}.acc.kiosk .acc-bezel{padding:0;border-radius:0;box-shadow:none;background:#000}.acc.kiosk .acc-wrap{border-radius:0}
