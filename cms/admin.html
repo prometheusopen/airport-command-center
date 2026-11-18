@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Content manager · Airport Command Center</title>
+<style>
+@font-face{font-family:"Inter";src:url(/player/fonts/inter-latin-wght-normal.woff2) format("woff2");font-weight:100 900}
+*{box-sizing:border-box}body{margin:0;font:15px/1.45 Inter,system-ui,sans-serif;background:#f4f5f8;color:#141a2a}
+header{display:flex;align-items:center;gap:16px;padding:14px 24px;background:#0f1729;color:#fff}header h1{font-size:18px;margin:0}header span{color:#c8d0e0;font-size:13px}
+main{display:grid;grid-template-columns:260px 1fr;gap:24px;padding:24px;max-width:1400px}
+nav button{display:block;width:100%;text-align:left;padding:12px 14px;margin-bottom:8px;border-radius:10px;border:1px solid #d5dae5;background:#fff;font:inherit;cursor:pointer}
+nav button[aria-current="true"]{border-color:#0f1729;box-shadow:inset 3px 0 0 #0f1729;font-weight:700}
+section{background:#fff;border:1px solid #d5dae5;border-radius:14px;padding:18px 20px;margin-bottom:18px}
+h2{font-size:16px;margin:0 0 12px}label{display:block;font-size:13px;font-weight:600;margin-bottom:4px;color:#3a4358}
+input,select,textarea{font:inherit;padding:8px 10px;border:1px solid #b9c1d1;border-radius:8px;width:100%;background:#fff;color:#141a2a}
+.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.wide{grid-column:span 2}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;padding:8px 6px;border-bottom:1px solid #e3e7ef;vertical-align:top}th{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#4a5469}
+.btn{padding:9px 14px;border-radius:9px;border:1px solid #0f1729;background:#0f1729;color:#fff;font:600 14px Inter,sans-serif;cursor:pointer}.btn.alt{background:#fff;color:#0f1729}.btn.danger{background:#fff;color:#a32d0a;border-color:#a32d0a}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.msg{font-size:14px;color:#0f6b46;min-height:20px}.err{color:#a32d0a}
+pre{background:#0f1729;color:#e8edf7;padding:12px;border-radius:10px;max-height:240px;overflow:auto;font-size:12px}
+.pill{display:inline-block;padding:2px 8px;border-radius:999px;background:#e8ecf4;font-size:12px}
+</style></head>
+<body>
+<header><h1>Content manager</h1><span>Airport Command Center · phase 0 · local only · all content is fictional sample content</span></header>
+<main>
+  <nav aria-label="Clients" id="clients"></nav>
+  <div>
+    <section aria-labelledby="b-h"><h2 id="b-h">Branding</h2>
+      <form id="brand" class="grid">
+        <div class="wide"><label for="f-name">Client name</label><input id="f-name" name="name" maxlength="40" required></div>
+        <div class="wide"><label for="f-tag">Tagline</label><input id="f-tag" name="tagline" maxlength="80"></div>
+        <div><label for="f-mono">Logo monogram</label><input id="f-mono" name="monogram" maxlength="3"></div>
+        <div><label for="f-acc">Accent colour</label><input id="f-acc" name="accent" type="color"></div>
+        <div><label for="f-theme">Theme</label><select id="f-theme" name="theme"><option value="dark">Dark</option><option value="light">Light</option></select></div>
+        <div class="row" style="align-items:flex-end"><button class="btn" type="submit">Save branding</button></div>
+      </form>
+    </section>
+    <section aria-labelledby="i-h"><h2 id="i-h">Menus, specials and ads</h2>
+      <table><thead><tr><th>Kind</th><th>Title</th><th>Price</th><th>Image</th><th>Shows</th><th>Seconds</th><th>Weight</th><th>On</th><th><span class="sr">Actions</span></th></tr></thead><tbody id="items"></tbody></table>
+    </section>
+    <section aria-labelledby="n-h"><h2 id="n-h">Add or edit an item</h2>
+      <form id="item" class="grid">
+        <input type="hidden" name="id">
+        <div><label for="i-kind">Kind</label><select id="i-kind" name="kind"><option value="special">Special</option><option value="ad">Ad</option><option value="menu">Menu</option><option value="notice">Guest info</option></select></div>
+        <div class="wide"><label for="i-title">Title</label><input id="i-title" name="title" maxlength="60" required></div>
+        <div class="wide"><label for="i-body">Text</label><input id="i-body" name="body" maxlength="140"></div>
+        <div><label for="i-price">Price</label><input id="i-price" name="price" maxlength="20"></div>
+        <div><label for="i-img">Image</label><select id="i-img" name="image"><option>breakfast</option><option>coffee</option><option>bowl</option><option>cocktail</option><option>pastry</option><option>room</option></select></div>
+        <div><label for="i-start">From</label><input id="i-start" name="start_hhmm" value="00:00" pattern="[0-2][0-9]:[0-5][0-9]"></div>
+        <div><label for="i-end">Until</label><input id="i-end" name="end_hhmm" value="24:00" pattern="[0-2][0-9]:[0-5][0-9]"></div>
+        <div><label for="i-dur">Seconds on screen</label><input id="i-dur" name="duration_s" type="number" min="4" max="30" value="8"></div>
+        <div><label for="i-w">Weight (1–5)</label><input id="i-w" name="weight" type="number" min="1" max="5" value="1"></div>
+        <div class="row" style="align-items:flex-end"><button class="btn" type="submit">Save item</button><button class="btn alt" type="reset">Clear</button></div>
+      </form>
+    </section>
+    <section aria-labelledby="p-h"><h2 id="p-h">Publish</h2>
+      <div class="row"><button class="btn" id="pub" type="button">Publish playlist</button><span class="pill" id="ver"></span><a href="/" target="_blank" rel="noopener">Open the player</a></div>
+      <p class="msg" id="msg" role="status" aria-live="polite"></p>
+      <pre id="pl" aria-label="Published playlist JSON" tabindex="0"></pre>
+    </section>
+  </div>
+</main>
+<style>.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}</style>
+<script type="module">
+const $ = (s) => document.querySelector(s); let cur = null;
+const api = async (u, o = {}) => { const r = await fetch(u, { headers: { 'content-type': 'application/json' }, ...o }); const j = await r.json(); if (!r.ok) throw new Error(j.error || r.status); return j; };
+const say = (t, err) => { const m = $('#msg'); m.textContent = t; m.classList.toggle('err', !!err); };
+const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+async function loadClients() {
+  const cs = await api('/api/cms/clients'); cur = cur || cs[0].id;
+  $('#clients').innerHTML = cs.map((c) => `<button type="button" data-id="${c.id}" aria-current="${c.id === cur}">${esc(c.name)}<br><small>${c.scene === 'lobby' ? 'Hotel lobby screen' : 'Airport restaurant screen'} · v${c.version}</small></button>`).join('');
+  $('#clients').querySelectorAll('button').forEach((b) => b.onclick = () => { cur = b.dataset.id; loadClients(); });
+  const { client, items } = await api('/api/cms/clients/' + cur);
+  const f = $('#brand'); f.name.value = client.name; f.tagline.value = client.tagline || ''; f.monogram.value = client.monogram || ''; f.accent.value = client.accent; f.theme.value = client.theme;
+  $('#ver').textContent = client.published_at ? `Published v${client.version} · ${new Date(client.published_at).toLocaleString()}` : 'Not published yet';
+  $('#items').innerHTML = items.map((i) => `<tr><td>${esc(i.kind)}</td><td><b>${esc(i.title)}</b><br><small>${esc(i.body)}</small></td><td>${esc(i.price || '')}</td><td>${esc(i.image || '')}</td><td>${i.start_hhmm}–${i.end_hhmm}</td><td>${i.duration_s}</td><td>${i.weight}</td><td>${i.enabled ? 'Yes' : 'No'}</td><td class="row"><button class="btn alt" data-edit="${i.id}" type="button">Edit<span class="sr"> ${esc(i.title)}</span></button><button class="btn danger" data-del="${i.id}" type="button">Delete<span class="sr"> ${esc(i.title)}</span></button></td></tr>`).join('');
+  $('#items').querySelectorAll('[data-edit]').forEach((b) => b.onclick = () => { const it = items.find((x) => x.id == b.dataset.edit); const g = $('#item'); for (const k of ['id', 'kind', 'title', 'body', 'price', 'image', 'start_hhmm', 'end_hhmm', 'duration_s', 'weight']) g[k].value = it[k] ?? ''; g.title.focus(); });
+  $('#items').querySelectorAll('[data-del]').forEach((b) => b.onclick = async () => { await api(`/api/cms/clients/${cur}/items/${b.dataset.del}`, { method: 'DELETE' }); say('Deleted. Publish to update the screen.'); loadClients(); });
+}
+$('#brand').onsubmit = async (e) => { e.preventDefault(); try { await api('/api/cms/clients/' + cur, { method: 'PUT', body: JSON.stringify(Object.fromEntries(new FormData(e.target))) }); say('Branding saved. Publish to update the screen.'); loadClients(); } catch (x) { say(x.message, true); } };
+$('#item').onsubmit = async (e) => { e.preventDefault(); const b = Object.fromEntries(new FormData(e.target)); try { await api(b.id ? `/api/cms/clients/${cur}/items/${b.id}` : `/api/cms/clients/${cur}/items`, { method: b.id ? 'PUT' : 'POST', body: JSON.stringify(b) }); e.target.reset(); say('Item saved. Publish to update the screen.'); loadClients(); } catch (x) { say(x.message, true); } };
+$('#pub').onclick = async () => { try { const pl = await api(`/api/cms/clients/${cur}/publish`, { method: 'POST' }); $('#pl').textContent = JSON.stringify(pl, null, 2); say(`Published version ${pl.version} with ${pl.items.length} items. Screens pick it up on their next refresh.`); loadClients(); } catch (x) { say(x.message, true); } };
+loadClients().then(async () => { try { $('#pl').textContent = JSON.stringify(await api('/api/lobby/content?client=' + cur), null, 2); } catch {} });
+</script>
+</body></html>

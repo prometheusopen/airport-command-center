@@ -1,0 +1,12 @@
+Airport Command Center (phase 0)
+Copyright 2026 Prometheus Open. Licensed under the Apache License, Version 2.0.
+
+Third-party data and software used (not vendored unless stated):
+- data/route.json, data/map.json, data/raw/*.json, data/sim-track.json, data/traccar-session.json:
+  derived from OpenStreetMap data, (c) OpenStreetMap contributors, available under the
+  Open Database License (ODbL) 1.0, https://www.openstreetmap.org/copyright . These derived
+  files are made available under the ODbL 1.0 as well.
+- player/fonts/inter-latin-wght-normal.woff2: Inter, SIL Open Font License 1.1 (player/fonts/OFL-Inter.txt).
+- Traccar server (Apache-2.0) is installed separately; see traccar/README.md. Not vendored.
+- Live data at runtime: FAA NAS Status, NWS api.weather.gov, Aviation Weather Center (US government
+  public data); see docs/DATA-SOURCES.md.

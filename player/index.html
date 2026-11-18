@@ -1,0 +1,10 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lobby screen · Airport Command Center (phase 0, local)</title>
+<style>@font-face{font-family:"Inter";src:url(/player/fonts/inter-latin-wght-normal.woff2) format("woff2");font-weight:100 900}body{margin:0;padding:20px;background:#f3f1ec;font-family:Inter,system-ui,sans-serif}h1{font-size:20px;margin:0 0 12px}</style>
+<link rel="stylesheet" href="/player/player.css"></head>
+<body><main><h1>Lobby screen · local product (live Traccar)</h1><div id="acc"></div></main>
+<script type="module">
+import { mountPlayer } from '/player/player.js';
+mountPlayer(document.getElementById('acc'), { mode: 'server', statusUrl: '/api/airport/status', routeUrl: '/api/shuttle/route', mapUrl: '/data/map.json', streamUrl: '/api/shuttle/stream', playlistUrl: (id) => `/api/lobby/content?client=${id}` });
+</script></body></html>

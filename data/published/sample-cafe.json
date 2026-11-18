@@ -1,0 +1,132 @@
+{
+ "schema": "acc.playlist.v1",
+ "client": {
+  "id": "sample-cafe",
+  "name": "Sample Café",
+  "tagline": "Gate-side kitchen · Concourse B",
+  "accent": "#5ec4b6",
+  "theme": "dark",
+  "monogram": "SC",
+  "scene": "restaurant"
+ },
+ "version": 1,
+ "publishedAt": "2026-11-18T05:38:31.913Z",
+ "sample": true,
+ "items": [
+  {
+   "id": 5,
+   "kind": "special",
+   "title": "Grab-and-go breakfast",
+   "body": "Egg sandwich, fruit cup and coffee.",
+   "price": "$8.99",
+   "image": "breakfast",
+   "durationS": 8,
+   "window": [
+    "00:00",
+    "24:00"
+   ],
+   "days": [
+    "mon",
+    "tue",
+    "wed",
+    "thu",
+    "fri",
+    "sat",
+    "sun"
+   ],
+   "weight": 1
+  },
+  {
+   "id": 6,
+   "kind": "ad",
+   "title": "Coffee before you board",
+   "body": "Any size drip coffee, ready in under a minute.",
+   "price": "$3.49",
+   "image": "coffee",
+   "durationS": 8,
+   "window": [
+    "00:00",
+    "24:00"
+   ],
+   "days": [
+    "mon",
+    "tue",
+    "wed",
+    "thu",
+    "fri",
+    "sat",
+    "sun"
+   ],
+   "weight": 1
+  },
+  {
+   "id": 7,
+   "kind": "special",
+   "title": "Harvest grain bowl",
+   "body": "Packed to fly. Ask for a lid and fork.",
+   "price": "$12.50",
+   "image": "bowl",
+   "durationS": 8,
+   "window": [
+    "10:30",
+    "24:00"
+   ],
+   "days": [
+    "mon",
+    "tue",
+    "wed",
+    "thu",
+    "fri",
+    "sat",
+    "sun"
+   ],
+   "weight": 1
+  },
+  {
+   "id": 8,
+   "kind": "ad",
+   "title": "Happy hour at the bar",
+   "body": "Weekdays 3–6 PM. 21+ with ID.",
+   "price": null,
+   "image": "cocktail",
+   "durationS": 8,
+   "window": [
+    "15:00",
+    "18:00"
+   ],
+   "days": [
+    "mon",
+    "tue",
+    "wed",
+    "thu",
+    "fri",
+    "sat",
+    "sun"
+   ],
+   "weight": 1
+  },
+  {
+   "id": 9,
+   "kind": "menu",
+   "title": "Fresh pastries",
+   "body": "Baked in-house every morning.",
+   "price": "from $3.75",
+   "image": "pastry",
+   "durationS": 8,
+   "window": [
+    "00:00",
+    "24:00"
+   ],
+   "days": [
+    "mon",
+    "tue",
+    "wed",
+    "thu",
+    "fri",
+    "sat",
+    "sun"
+   ],
+   "weight": 1
+  }
+ ]
+}

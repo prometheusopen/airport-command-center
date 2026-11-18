@@ -1,0 +1,1 @@
+Fixture faa-ord-gdp.xml is hand-written in the FAA DTD shape to test a ground delay program at ORD (not a real event). faa.xml, obs.json, metar.json and taf.json are real responses captured 2026-11-18 ~05:18 UTC.

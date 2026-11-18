@@ -1,0 +1,109 @@
+{
+ "schema": "acc.playlist.v1",
+ "client": {
+  "id": "sample-hotel",
+  "name": "Sample Hotel",
+  "tagline": "Airport shuttle every 20 minutes",
+  "accent": "#f2b33d",
+  "theme": "dark",
+  "monogram": "SH",
+  "scene": "lobby"
+ },
+ "version": 1,
+ "publishedAt": "2026-11-18T05:38:31.917Z",
+ "sample": true,
+ "items": [
+  {
+   "id": 1,
+   "kind": "special",
+   "title": "Late check-in? Grab a hot plate",
+   "body": "Kitchen open until midnight. Ask the front desk.",
+   "price": "$14",
+   "image": "bowl",
+   "durationS": 8,
+   "window": [
+    "17:00",
+    "24:00"
+   ],
+   "days": [
+    "mon",
+    "tue",
+    "wed",
+    "thu",
+    "fri",
+    "sat",
+    "sun"
+   ],
+   "weight": 1
+  },
+  {
+   "id": 2,
+   "kind": "ad",
+   "title": "Morning coffee bar",
+   "body": "Fresh espresso drinks in the lobby from 5 AM.",
+   "price": null,
+   "image": "coffee",
+   "durationS": 8,
+   "window": [
+    "00:00",
+    "24:00"
+   ],
+   "days": [
+    "mon",
+    "tue",
+    "wed",
+    "thu",
+    "fri",
+    "sat",
+    "sun"
+   ],
+   "weight": 1
+  },
+  {
+   "id": 3,
+   "kind": "notice",
+   "title": "Shuttle to the airport",
+   "body": "Every 20 minutes, 4 AM to midnight. Sign up at the desk.",
+   "price": null,
+   "image": "room",
+   "durationS": 8,
+   "window": [
+    "00:00",
+    "24:00"
+   ],
+   "days": [
+    "mon",
+    "tue",
+    "wed",
+    "thu",
+    "fri",
+    "sat",
+    "sun"
+   ],
+   "weight": 1
+  },
+  {
+   "id": 4,
+   "kind": "special",
+   "title": "Breakfast to go",
+   "body": "Ready in 5 minutes for early flights.",
+   "price": "$9",
+   "image": "breakfast",
+   "durationS": 8,
+   "window": [
+    "04:00",
+    "11:00"
+   ],
+   "days": [
+    "mon",
+    "tue",
+    "wed",
+    "thu",
+    "fri",
+    "sat",
+    "sun"
+   ],
+   "weight": 1
+  }
+ ]
+}

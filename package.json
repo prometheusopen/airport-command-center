@@ -1,0 +1,17 @@
+{
+  "name": "airport-command-center",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Airport Command Center phase 0: Traccar shuttle ETA, FAA/NWS feeds, arrival forecast, content manager and lobby/restaurant player.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "engines": { "node": ">=22.5" },
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "start": "node server/server.js",
+    "route": "node replay/build-route.js && node replay/simulate.js",
+    "replay": "node replay/replay.js",
+    "export": "node replay/export.js",
+    "site": "node site/build-site.js"
+  }
+}
