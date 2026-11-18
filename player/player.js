@@ -262,7 +262,7 @@ class Player {
       if (cityCell.dataset.v !== ck) { cityCell.dataset.v = ck; cityCell.innerHTML = `<b>${esc(f.city)}</b><small class="${gateNote ? 'gate-note' : ''}">${gateNote ? esc(gateNote) : `${esc(f.airline)} · ${esc(f.flight)}`}</small>`; }
       setFlap(cell('code'), f.apt, this.rm);
       const g = cell('gate'); setFlap(g, f.gate, this.rm); g.classList.toggle('gate-chg', !!gateNote);
-      if (cell('boarding')) { const m = Math.round((f.boardAt - now) / MIN); const close = Math.round((f.est - 10 * MIN - now) / MIN); cell('boarding').textContent = f.status === 'Cancelled' ? '—' : f.status === 'Departed' ? 'Closed' : m > 0 ? `in ${m} min` : close > 0 ? `closes in ${close} min` : 'Closed'; }
+      if (cell('boarding')) { const m = Math.round((f.boardAt - now) / MIN); const close = Math.round((f.est - 5 * MIN - now) / MIN); cell('boarding').textContent = f.status === 'Cancelled' ? '—' : f.status === 'Departed' ? 'Closed' : m > 0 ? `in ${m} min` : close > 0 ? `closes in ${close} min` : 'Closed'; }
       const st = f.status === 'Delayed' ? `Delayed ${f.delayMin}m` : f.status === 'Early' ? `Early ${-f.delayMin}m` : f.status; const sc = cell('status');
       if (sc.dataset.v !== st) { const first = !sc.dataset.v; sc.dataset.v = st; const [cls, ic] = STATUS[f.status] || ['ok', '']; sc.innerHTML = `<span class="chip chip-${cls}${first || this.rm ? '' : ' pulse'}"><i aria-hidden="true">${ic}</i>${esc(st)}</span>`; }
     });

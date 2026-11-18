@@ -28,4 +28,5 @@ await click('[data-view-btn="split"]'); await W(1000); await snap('item11-split-
 // wait for the shuttle takeover (replay) so the phone shows the shuttle alert
 await pg.waitForSelector('.take.on',{timeout:150000}).catch(()=>console.log('no takeover'));
 await W(4000); await snap('item11-split-phone-shuttle-alert','.acc-stage'); await snap('item09-takeover');
+for(const [n,u] of [['kiosk-board-lobby-1-map','board.html?property=demo-hotel&screen=lobby-1'],['kiosk-board-lobby-2-espresso','board.html?property=demo-hotel&screen=lobby-2&skin=espresso'],['kiosk-board-cafe-caramel','board.html?property=demo-cafe&screen=gate-b-1&skin=caramel']]){await pg.goto(base+'/'+u);await W(6000);await pg.screenshot({path:`${out}/${n}-${dev}.png`});console.log('shot',n);}
 console.log('errors',JSON.stringify(errs)); await b.close();})();
